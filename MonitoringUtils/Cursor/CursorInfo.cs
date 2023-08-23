@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
+using System.Numerics;
 
 namespace MonitoringUtils.Cursor
 {
