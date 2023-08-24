@@ -1,6 +1,6 @@
 # CSharpMonitoringUtils
 
-An easy-to-use C# system monitoring library based on the community project *Vanara*. 
+An easy-to-use C# system monitoring library based on the community project [*Vanara*](https://github.com/dahall/vanara). 
 
 The goal of this library is to extract useful functionality from project Vanara regarding system monitoring (Input, Processes, Windows) for the *Microsoft Windows* operating system and make it more C# friendly (and facilitate its use).
 
