@@ -19,7 +19,7 @@ As the project isn't properly documented yet, here are some guidelines to work w
 
 ### When gathering input, the same received data may not be obtainable anymore
 
-For example, when you call CursorFuncs.HasAnyButtonChanged(), the information about the buttons state is cleared out, so any new call to this method will report no changes until new data is gathered. This leads to the next tip:
+For example, when you call MouseFuncs.HasAnyButtonChanged(), the information about the buttons state is cleared out, so any new call to this method will report no changes until new data is gathered. This leads to the next tip:
 
 ### Store obtained data for multiple subsequent manipulations
 

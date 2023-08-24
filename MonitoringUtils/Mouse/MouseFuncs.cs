@@ -3,7 +3,7 @@ using static Vanara.PInvoke.User32;
 
 namespace MonitoringUtils.Cursor
 {
-    public static class CursorFuncs
+    public static class MouseFuncs
     {
         public static CursorInfo GetStaticCursorInfo() => new CursorInfo(); // Improve naming, as it retrieves data in a persistent manner, not actual exclusive static info
 
@@ -38,15 +38,15 @@ namespace MonitoringUtils.Cursor
             return m1 || m2 || m3 || m4 || m5;
         }
         
-        public static CursorButtonInfo GetButtonStates(MouseButtonsEnum button)
+        public static MouseButtonInfo GetButtonStates(MouseButtonsEnum button)
         {
-            return new CursorButtonInfo(button);
+            return new MouseButtonInfo(button);
         }
 
-        public static Dictionary<MouseButtonsEnum, CursorButtonInfo> GetAllButtonStates()
+        public static Dictionary<MouseButtonsEnum, MouseButtonInfo> GetAllButtonStates()
         {
             Array enumValues = Enum.GetValues(typeof(MouseButtonsEnum));
-            Dictionary<MouseButtonsEnum, CursorButtonInfo> keyStatusMap = new Dictionary<MouseButtonsEnum, CursorButtonInfo>(enumValues.Length);
+            Dictionary<MouseButtonsEnum, MouseButtonInfo> keyStatusMap = new Dictionary<MouseButtonsEnum, MouseButtonInfo>(enumValues.Length);
 
             foreach (MouseButtonsEnum mouseButton in enumValues)
             {

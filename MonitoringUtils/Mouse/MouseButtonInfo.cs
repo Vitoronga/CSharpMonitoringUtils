@@ -12,14 +12,14 @@ namespace MonitoringUtils.Cursor
         ExtraButton2 = 6,
     }
 
-    public class CursorButtonInfo : IButtonInfo
+    public class MouseButtonInfo : IButtonInfo
     {
         public MouseButtonsEnum Button { get; init; }
         public bool IsPressed { get; init; }
         public bool WasPressed { get; init; }
 
-        public CursorButtonInfo(MouseButtonsEnum button) : this(button, GetAsyncKeyState((int)button)) { }
-        public CursorButtonInfo(MouseButtonsEnum button, short statusCode)
+        public MouseButtonInfo(MouseButtonsEnum button) : this(button, GetAsyncKeyState((int)button)) { }
+        public MouseButtonInfo(MouseButtonsEnum button, short statusCode)
         {
             Button = button;
 
