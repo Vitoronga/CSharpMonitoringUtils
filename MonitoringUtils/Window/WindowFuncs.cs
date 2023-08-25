@@ -1,4 +1,5 @@
-﻿using Vanara.PInvoke;
+﻿using System.Diagnostics;
+using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
 
 namespace MonitoringUtils.Window
@@ -63,17 +64,23 @@ namespace MonitoringUtils.Window
 
         private static TaskCompletionSource windowsEnumerated;
 
-        private static List<WindowInfo> _windows_buffer_;
+        private static List<WindowInfo> _windowsBuffer_;
+        private static bool _getOnlyMainWindow_ = true;
+        private static bool _getHiddenWindows_ = false;
+
 
         /// <summary>
         /// Returns all existing windows asynchronously
         /// </summary>
+        /// <param name="getOnlyMainWindow">Ignore secondary windows?</param>
         /// <param name="getHiddenWindows">Include hidden windows? (windows that doesn't show to the user and can't receive inputs)</param>
         /// <returns></returns>
-        public static async Task<List<WindowInfo>> GetAllWindows(bool getHiddenWindows = false)
+        public static async Task<List<WindowInfo>> GetAllWindows(bool getOnlyMainWindow = true, bool getHiddenWindows = false)
         {
             // Preparar espera ao task completion source (mix loko de task com evento)
-            _windows_buffer_ = new List<WindowInfo>();
+            _windowsBuffer_ = new List<WindowInfo>();
+            _getOnlyMainWindow_ = getOnlyMainWindow;
+            _getHiddenWindows_ = getHiddenWindows;
             windowsEnumerated = new TaskCompletionSource();
 
             if (getHiddenWindows) EnumWindows(new EnumWindowsProc(EnumWindowsProcHandler), default);
@@ -82,7 +89,7 @@ namespace MonitoringUtils.Window
             // Esperar término dos callbacks
             await windowsEnumerated.Task;
 
-            return _windows_buffer_;
+            return _windowsBuffer_;
         }
 
         // É tipo um delegate a ser chamado pelo evento de enumeração de chamadas! (do SO provavelmente)
@@ -92,13 +99,25 @@ namespace MonitoringUtils.Window
 
             WindowInfo wInfo = new WindowInfo(hwnd);
 
-            // FILTRANDO JANELA
-            if (!wInfo.IsEnabledForInput || (!wInfo.IsVisible && !wInfo.IsMinimized) || string.IsNullOrWhiteSpace(wInfo.MainModulePath)) return true;
+            // FILTRANDO JANELA:
 
-            _windows_buffer_.Add(wInfo);
+            // Janelas ocultas:
+            bool isHidden = !wInfo.IsEnabledForInput || string.IsNullOrWhiteSpace(wInfo.MainModulePath);
+            bool passesHiddenCheck = _getHiddenWindows_ || (!_getHiddenWindows_ && !isHidden);
+
+            // Janelas principais:
+            Process p = Process.GetProcessById(wInfo.ProcessId);
+            bool isMainWindow = p.MainWindowHandle == wInfo.Handle;
+            bool passesMainWindowCheck = !_getOnlyMainWindow_ || (_getOnlyMainWindow_ && isMainWindow);
 
             // Detecta se é a última janela (a mais atrás de todas)
             bool isLast = hwnd == GetWindow(User32.GetForegroundWindow(), GetWindowCmd.GW_HWNDLAST); // Foreground window because whatever...
+
+            // Realiza filtro:
+            if (!(passesHiddenCheck && passesMainWindowCheck)) {
+                if (!isLast) return true;
+            }
+            else _windowsBuffer_.Add(wInfo);
 
             if (isLast && !windowsEnumerated.TrySetResult() &&
                 !windowsEnumerated.TrySetException(new InvalidOperationException("Failed to set task completion source value")))
