@@ -5,8 +5,19 @@ namespace MonitoringUtils.Cursor
 {
     public static class MouseFuncs
     {
+        /// <summary>
+        /// <para>
+        /// Retrieves information about the cursor in a persistent manner.
+        /// </para>
+        /// </summary>
+        /// <returns></returns>
         public static CursorInfo GetStaticCursorInfo() => new CursorInfo(); // Improve naming, as it retrieves data in a persistent manner, not actual exclusive static info
 
+        /// <summary>
+        /// Detects if a certain button is currently being pressed down.
+        /// </summary>
+        /// <param name="button">The mouse button defined by the MouseButtonsEnum</param>
+        /// <returns></returns>
         public static bool IsButtonPressed(MouseButtonsEnum button)
         {
             short statusCode = GetKeyState((int)button);
@@ -16,6 +27,11 @@ namespace MonitoringUtils.Cursor
             return isPressed;
         }
 
+        /// <summary>
+        /// Detects if a button state has changed since it was last checked (by calling this method or any other that may perform said check).
+        /// </summary>
+        /// <param name="button">The mouse button defined by the MouseButtonsEnum</param>
+        /// <returns></returns>
         public static bool HasButtonChanged(MouseButtonsEnum button)
         {
             short statusCode = GetAsyncKeyState((int)button);
@@ -26,7 +42,20 @@ namespace MonitoringUtils.Cursor
             return isPressed || wasPressed;
         }
 
-        // WARNING: ONLY USE THIS METHOD IF YOU DON'T NEED THE STATES DETAILS!!! Once the state is captured, it is "cleared out" of the system, so subsequent calls won't receive the current state. 
+        /// <summary>
+        /// <para>
+        /// Detects if ANY button state has changed since it was last checked.
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// WARNING: ONLY USE THIS METHOD IF YOU DON'T NEED THE STATES DETAILS!!!
+        /// </para>
+        /// <para>
+        /// Once the state is captured, it is "cleared out" of the system, so subsequent calls won't receive the same received data. 
+        /// </para>
+        /// </remarks>
+        /// <returns></returns>
         public static bool HasAnyButtonChanged()
         {
             bool m1 = HasButtonChanged(MouseButtonsEnum.LeftButton);
@@ -38,11 +67,20 @@ namespace MonitoringUtils.Cursor
             return m1 || m2 || m3 || m4 || m5;
         }
         
+        /// <summary>
+        /// Retrieves information about a certain button's states.
+        /// </summary>
+        /// <param name="button">The mouse button defined by the MouseButtonsEnum</param>
+        /// <returns></returns>
         public static MouseButtonInfo GetButtonStates(MouseButtonsEnum button)
         {
             return new MouseButtonInfo(button);
         }
 
+        /// <summary>
+        /// Retrieves information about ALL buttons' states.
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<MouseButtonsEnum, MouseButtonInfo> GetAllButtonStates()
         {
             Array enumValues = Enum.GetValues(typeof(MouseButtonsEnum));

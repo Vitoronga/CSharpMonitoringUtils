@@ -7,6 +7,11 @@ namespace MonitoringUtils.Keyboard
     {
         //public static KeyboardInfo GetStaticKeyboardInfo() => new KeyboardInfo(); // Improve naming, as it retrieves data in a persistent manner, not actual exclusive static info
 
+        /// <summary>
+        /// Detects if a certain key is currently being pressed down.
+        /// </summary>
+        /// <param name="button">The keyboard button defined by the KeyboardButtonsEnum</param>
+        /// <returns></returns>
         public static bool IsKeyPressed(KeyboardButtonsEnum button)
         {
             short returnCode = GetKeyState((int)button);
@@ -16,6 +21,11 @@ namespace MonitoringUtils.Keyboard
             return isPressed;
         }
 
+        /// <summary>
+        /// Detects if a key is toggled on (such as the CAPS LOCK button).
+        /// </summary>
+        /// <param name="button">The keyboard button defined by the KeyboardButtonsEnum</param>
+        /// <returns></returns>
         public static bool IsKeyToggled(KeyboardButtonsEnum button)
         {
             short returnCode = GetKeyState((int)button);
@@ -25,6 +35,16 @@ namespace MonitoringUtils.Keyboard
             return isToggled;
         }
 
+        /// <summary>
+        /// Detects if a key is currently being pressed down or is toggled on.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Both checks are done with a single system call, so there is no relevant performance impact.
+        /// </para>
+        /// </remarks>
+        /// <param name="button">The keyboard button defined by the KeyboardButtonsEnum</param>
+        /// <returns></returns>
         public static bool IsKeyPressedOrToggled(KeyboardButtonsEnum button)
         {
             short returnCode = GetKeyState((int)button);
@@ -35,6 +55,11 @@ namespace MonitoringUtils.Keyboard
             return isPressed || isToggled;
         }
 
+        /// <summary>
+        /// Detects if a key state has changed since it was last checked (by calling this method or any other that may perform said check).
+        /// </summary>
+        /// <param name="button">The keyboard button defined by the KeyboardButtonsEnum</param>
+        /// <returns></returns>
         public static bool HasKeyChanged(KeyboardButtonsEnum button)
         {
             short returnCode = GetAsyncKeyState((int)button);
@@ -46,6 +71,20 @@ namespace MonitoringUtils.Keyboard
         }
 
         // WARNING: ONLY USE THIS METHOD IF YOU DON'T NEED THE STATES DETAILS!!! Once the state is captured, it is "cleared out" of the system, so subsequent calls won't receive the current state. 
+        /// <summary>
+        /// <para>
+        /// Detects if ANY key state has changed since it was last checked.
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// WARNING: ONLY USE THIS METHOD IF YOU DON'T NEED THE STATES DETAILS!!!
+        /// </para>
+        /// <para>
+        /// Once the state is captured, it is "cleared out" of the system, so subsequent calls won't receive the same received data. 
+        /// </para>
+        /// </remarks>
+        /// <returns></returns>
         public static bool HasAnyKeyChanged()
         {
             IEnumerable<KeyboardButtonsEnum> array = Enum.GetValues(typeof(KeyboardButtonsEnum)).Cast<KeyboardButtonsEnum>();
@@ -58,11 +97,20 @@ namespace MonitoringUtils.Keyboard
             return false;
         }
 
+        /// <summary>
+        /// Retrieves the states of a certain key.
+        /// </summary>
+        /// <param name="button">The keyboard button defined by the KeyboardButtonsEnum</param>
+        /// <returns></returns>
         public static KeyboardButtonInfo GetKeyStates(KeyboardButtonsEnum button)
         {
             return new KeyboardButtonInfo(button);
         }
 
+        /// <summary>
+        /// Retrieves the states of ALL keys.
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<KeyboardButtonsEnum, KeyboardButtonInfo> GetAllKeyStates()
         {
             Array enumValues = Enum.GetValues(typeof(KeyboardButtonsEnum));

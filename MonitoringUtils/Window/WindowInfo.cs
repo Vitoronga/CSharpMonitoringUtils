@@ -9,7 +9,7 @@ namespace MonitoringUtils.Window
     public class WindowInfo
     {
         private WINDOWINFO windowInfo;
-        public HWND Handle { get; private set; } // ultra grandchild of HWND
+        public HWND Handle { get; private set; }
         public Process MainProcess { get; private set; }
 
         public WindowInfo(HWND safeHwnd)
@@ -106,7 +106,6 @@ namespace MonitoringUtils.Window
         public bool IsMinimized => IsIconic(Handle);
         public bool IsMaximized => IsZoomed(Handle);
         public bool IsEnabledForInput => IsWindowEnabled(Handle);
-
         public uint ThreadId => GetWindowThreadProcessId(Handle, out uint _);
         public int ProcessId => MainProcess.Id;
         public string MainModuleName => MainProcess.MainModule.ModuleName;

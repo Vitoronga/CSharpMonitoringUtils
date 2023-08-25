@@ -5,11 +5,37 @@ namespace MonitoringUtils.Window
 {
     public class WindowFuncs
     {
+        /// <summary>
+        /// Minimizes a window by the handle.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
         public static bool MinimizeWindow(HWND handle) => CloseWindow(handle);
+        
+        /// <summary>
+        /// Minimizes a window.
+        /// </summary>
+        /// <param name="wInfo">The desired window's WindowInfo object</param>
+        /// <returns></returns>
         public static bool MinimizeWindow(WindowInfo wInfo) => MinimizeWindow(wInfo.Handle);
 
+        /// <summary>
+        /// Returns the foremost window - the one in front of all others
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The foreground window can be <c>NULL</c> in certain cases, such as
+		/// when a window is losing activation. 
+        /// </para>
+        /// </remarks>
+        /// <returns></returns>
         public static WindowInfo GetForegroundWindow() => new WindowInfo(User32.GetForegroundWindow());
 
+        /// <summary>
+        /// Tries to get the foremost window in an exception free manner.
+        /// </summary>
+        /// <param name="wInfo">The returning WindowInfo object</param>
+        /// <returns>A boolean representing the success in the retrieval</returns>
         public static bool TryGetForegroundWindow(out WindowInfo? wInfo)
         {
             wInfo = null;
@@ -39,6 +65,11 @@ namespace MonitoringUtils.Window
 
         private static List<WindowInfo> _windows_buffer_;
 
+        /// <summary>
+        /// Returns all existing windows asynchronously
+        /// </summary>
+        /// <param name="getHiddenWindows">Include hidden windows? (windows that doesn't show to the user and can't receive inputs)</param>
+        /// <returns></returns>
         public static async Task<List<WindowInfo>> GetAllWindows(bool getHiddenWindows = false)
         {
             // Preparar espera ao task completion source (mix loko de task com evento)
