@@ -403,4 +403,3 @@ FodyWeavers.xsd
 # Custom gitignores:
 tests_diag.sln
 tests_diag/
-*.csproj
