@@ -1,7 +1,7 @@
 ﻿using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
 
-namespace MonitoringUtils.Cursor
+namespace MonitoringUtils.Mouse
 {
     public static class MouseFuncs
     {
@@ -11,7 +11,7 @@ namespace MonitoringUtils.Cursor
         /// </para>
         /// </summary>
         /// <returns></returns>
-        public static CursorInfo GetStaticCursorInfo() => new CursorInfo(); // Improve naming, as it retrieves data in a persistent manner, not actual exclusive static info
+        public static CursorInfo GetCursorInfo() => new CursorInfo();
 
         /// <summary>
         /// Detects if a certain button is currently being pressed down.

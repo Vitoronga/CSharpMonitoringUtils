@@ -1,7 +1,7 @@
 ﻿using static Vanara.PInvoke.User32;
 using MonitoringUtils.ButtonInfo;
 
-namespace MonitoringUtils.Cursor
+namespace MonitoringUtils.Mouse
 {
     public enum MouseButtonsEnum
     {
