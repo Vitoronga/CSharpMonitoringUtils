@@ -1,4 +1,5 @@
-﻿using Vanara.PInvoke;
+﻿using System.Numerics;
+using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
 
 namespace MonitoringUtils.Mouse
@@ -12,6 +13,23 @@ namespace MonitoringUtils.Mouse
         /// </summary>
         /// <returns></returns>
         public static CursorInfo GetCursorInfo() => new CursorInfo();
+
+        // Cursor Position Tracker Stuff:
+        private static Vector2 _last_cursor_pos_;
+        /// <summary>
+        /// Detects if the cursor position changed since it was last checked
+        /// </summary>
+        /// <returns></returns>
+        public static bool HasCursorPositionChanged()
+        {
+            CursorInfo cursorInfo = GetCursorInfo();
+            bool posChanged = false;
+
+            if (_last_cursor_pos_ != cursorInfo.Position) posChanged = true;
+
+            _last_cursor_pos_ = cursorInfo.Position;
+            return posChanged;
+        }
 
         /// <summary>
         /// Detects if a certain button is currently being pressed down.
