@@ -28,3 +28,8 @@ If you need to check several input states at once, you should store that general
 ### Favour the library implementations over manual/custom ones
 
 Calls to Keyboard.IsKeyPressed() and Keyboard.IsKeyToggled(), when done together, should be dropped in favour of Keyboard.IsKeyPressedOrToggled(), as it uses a single system call to retrieve both informations. This improves performance and consistency in the gathered data.
+
+
+## Should I use the .NET Core or .NET Framework version?
+
+The main version is the .NET Core. The .NET Framework version is a very raw conversion from the main one, and exists solely because it may be more adequate, compatible or useful considering the context of this library. However, some functionalities may not work properly in the .NET Framework version, and alternative ways of running them may become necessary. Major problems regarding that may be reported by creating an issue in this repo.
