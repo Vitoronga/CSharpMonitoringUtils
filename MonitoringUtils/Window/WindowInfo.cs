@@ -108,6 +108,7 @@ namespace MonitoringUtils.Window
         public bool IsEnabledForInput => IsWindowEnabled(Handle);
         public uint ThreadId => GetWindowThreadProcessId(Handle, out uint _);
         public int ProcessId => MainProcess.Id;
+        public string ProcessName => MainProcess.ProcessName;
         public string MainModuleName => MainProcess.MainModule.ModuleName;
         public string MainModulePath => MainProcess.MainModule.FileName;
         public string TitleText => GetWindowTitleText();
@@ -165,6 +166,7 @@ namespace MonitoringUtils.Window
             sb.AppendLine($"Origin file name: {MainModuleName}");
             sb.AppendLine($"Origin file path: {MainModulePath}");
             sb.AppendLine($"Thread Id: {ThreadId}");
+            sb.AppendLine($"Process Name: {ProcessName}");
             sb.AppendLine($"Process Id: {ProcessId}");
             sb.AppendLine($"Is visible: {IsVisible}");
             sb.AppendLine($"Is minimized: {IsMinimized}");
