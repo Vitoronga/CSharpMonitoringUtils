@@ -15,6 +15,8 @@ The goal of this library is to extract useful functionality from project Vanara 
 
 **It is recommended to run the code with Administrator privileges, otherwise it may experience instabilities or simply not run.**
 
+**Also, some minor functionalities may not work for 32-bit systems, so beware of that.**
+
 As the project isn't properly documented yet, here are some guidelines to work with it:
 
 ### When gathering input, the same received data may not be obtainable anymore
