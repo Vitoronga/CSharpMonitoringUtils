@@ -52,7 +52,14 @@ namespace MonitoringUtils.Window
 
             return true;
         }
-        
+
+        public static async Task<string> SendMessageWindowGetText(WindowInfo windowInfo)
+        {
+            StringBuilder builder = new StringBuilder(256);
+            await (Task.Run(() => SendMessage(windowInfo.Handle, WindowMessage.WM_GETTEXT, builder.Capacity, builder)));
+            return builder.ToString();
+        }
+
 
 
         // Get All Windows Stuff
