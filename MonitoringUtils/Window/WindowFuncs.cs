@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Text;
 using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
@@ -8,18 +9,11 @@ namespace MonitoringUtils.Window
     public class WindowFuncs
     {
         /// <summary>
-        /// Minimizes a window by the handle.
-        /// </summary>
-        /// <param name="handle"></param>
-        /// <returns></returns>
-        public static bool MinimizeWindow(HWND handle) => CloseWindow(handle);
-        
-        /// <summary>
         /// Minimizes a window.
         /// </summary>
         /// <param name="wInfo">The desired window's WindowInfo object</param>
         /// <returns></returns>
-        public static bool MinimizeWindow(WindowInfo wInfo) => MinimizeWindow(wInfo.Handle);
+        public static bool MinimizeWindow(WindowInfo wInfo) => CloseWindow(wInfo.Handle);
 
         /// <summary>
         /// Returns the foremost window - the one in front of all others
