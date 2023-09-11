@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
 
@@ -57,9 +58,9 @@ namespace MonitoringUtils.Window
 
             return true;
         }
+        
 
-        
-        
+
         // Get All Windows Stuff
 
         private static TaskCompletionSource windowsEnumerated;
@@ -67,7 +68,7 @@ namespace MonitoringUtils.Window
         private static List<WindowInfo> _windowsBuffer_;
         private static bool _getOnlyMainWindow_ = true;
         private static bool _getHiddenWindows_ = false;
-
+        //private static HWND _lastWindowHandle_; // Idea for optimizing checks
 
         /// <summary>
         /// Returns all existing windows asynchronously
@@ -121,6 +122,55 @@ namespace MonitoringUtils.Window
 
             if (isLast && !windowsEnumerated.TrySetResult() &&
                 !windowsEnumerated.TrySetException(new InvalidOperationException("Failed to set task completion source value")))
+                Console.WriteLine("FAILED ENUMERATING WINDOWS AT: " + wInfo.GetReadableDescription());
+
+            // O valor de retorno serve para interromper (se for false) a enumeração das janelas (aparentemente, de alguma forma misteriosa)
+            // Retorna true pra dll chamar novamente (caso tenha mais janelas pra mostrar)
+            return true;
+        }
+
+
+
+
+
+        // Get All Child Windows Stuff
+
+        private static TaskCompletionSource childWindowsEnumerated;
+
+        private static List<WindowInfo> _childWindowsBuffer_;
+        private static HWND? _lastChildWindowHandle_;
+
+        public static async Task<List<WindowInfo>> GetAllChildWindows(WindowInfo parentWindow)
+        {
+            // Preparar espera ao task completion source
+            _childWindowsBuffer_ = new List<WindowInfo>();
+            childWindowsEnumerated = new TaskCompletionSource();
+
+            EnumChildWindows(parentWindow.Handle, new EnumWindowsProc(EnumChildWindowsProcHandler), default); // Doesn't quite work (for now)
+
+            // Esperar término dos callbacks
+            await childWindowsEnumerated.Task;
+
+            _lastChildWindowHandle_ = null; // critical
+
+            return _childWindowsBuffer_;
+        }
+
+        private static bool EnumChildWindowsProcHandler(HWND hwnd, IntPtr lParam)
+        {
+            if (childWindowsEnumerated == null) throw new InvalidOperationException("Task completion source isn't instantiated.");
+
+            WindowInfo wInfo = new WindowInfo(hwnd);
+
+            if (_lastChildWindowHandle_ == null) _lastChildWindowHandle_ = GetWindow(wInfo.Handle, GetWindowCmd.GW_HWNDLAST);
+
+            // Detecta se é a última janela (a mais atrás de todas)
+            bool isLast = hwnd == _lastChildWindowHandle_;
+
+            _childWindowsBuffer_.Add(wInfo);
+
+            if (isLast && !childWindowsEnumerated.TrySetResult() &&
+                !childWindowsEnumerated.TrySetException(new InvalidOperationException("Failed to set task completion source value")))
                 Console.WriteLine("FAILED ENUMERATING WINDOWS AT: " + wInfo.GetReadableDescription());
 
             // O valor de retorno serve para interromper (se for false) a enumeração das janelas (aparentemente, de alguma forma misteriosa)
