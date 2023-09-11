@@ -10,7 +10,7 @@ namespace MonitoringUtils.Window
     {
         private WINDOWINFO windowInfo;
         public HWND Handle { get; private set; }
-        public Process MainProcess { get; private set; }
+        private Process mainProcess;
 
         public WindowInfo(HWND safeHwnd)
         {
@@ -93,7 +93,7 @@ namespace MonitoringUtils.Window
 
             windowInfo = wInfo;
 
-            MainProcess = Process.GetProcessById((int)GetProcessId());
+            mainProcess = Process.GetProcessById((int)GetProcessId());
         }
 
 
@@ -107,12 +107,13 @@ namespace MonitoringUtils.Window
         public bool IsMaximized => IsZoomed(Handle);
         public bool IsEnabledForInput => IsWindowEnabled(Handle);
         public uint ThreadId => GetWindowThreadProcessId(Handle, out uint _);
-        public int ProcessId => MainProcess.Id;
-        public string ProcessName => MainProcess.ProcessName;
-        public string MainModuleName => MainProcess.MainModule.ModuleName;
-        public string MainModulePath => MainProcess.MainModule.FileName;
+        public int ProcessId => mainProcess.Id;
+        public string ProcessName => mainProcess.ProcessName;
+        public string MainModuleName => mainProcess.MainModule.ModuleName;
+        public string MainModulePath => mainProcess.MainModule.FileName;
         public string TitleText => GetWindowTitleText();
 
+        public string ClassName => GetClassName();
 
 
         // DATA GETTERS
@@ -152,7 +153,12 @@ namespace MonitoringUtils.Window
             return processId;
         }
 
-
+        private string GetClassName()
+        {
+            StringBuilder builder = new StringBuilder(256);
+            User32.GetClassName(Handle, builder, builder.Capacity);
+            return builder.ToString();
+        }
 
         // OTHER
 
@@ -163,6 +169,7 @@ namespace MonitoringUtils.Window
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"Window title text: {TitleText}");
+            sb.AppendLine($"Window Class name: {ClassName}");
             sb.AppendLine($"Origin file name: {MainModuleName}");
             sb.AppendLine($"Origin file path: {MainModulePath}");
             sb.AppendLine($"Thread Id: {ThreadId}");
