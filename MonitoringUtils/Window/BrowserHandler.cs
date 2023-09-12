@@ -41,7 +41,7 @@ namespace MonitoringUtils.Window
                         if (!IsAnURL(tabName)) continue;
 
                         // Format if necessary
-                        if (getOnlyURLDomain) tabName = GetURLDomain(tabName);
+                        if (getOnlyURLDomain) tabName = GetURLDomainRegex(tabName);
 
                         return tabName;
                     }
@@ -57,8 +57,7 @@ namespace MonitoringUtils.Window
             string finalURL;
 
             // Remove https:// and www.
-            //finalURL = Regex.Replace(baseURL, "(?:https:\\/\\/|www\\.)", String.Empty);
-            finalURL = Regex.Replace(baseURL, "(?:https?:\\/\\/)", String.Empty);
+            finalURL = Regex.Replace(baseURL, "(?:https?:\\/\\/|www\\.)", String.Empty);
 
             // Get url up to the first /
             Match match = Regex.Match(finalURL, "[^\\/]+");            
@@ -73,7 +72,7 @@ namespace MonitoringUtils.Window
 
             finalURL = baseURL.Replace("https://", String.Empty);
             finalURL = finalURL.Replace("http://", String.Empty);
-            //finalURL = finalURL.Replace("www.", String.Empty);
+            finalURL = finalURL.Replace("www.", String.Empty);
 
             if (finalURL.Contains('/')) finalURL = finalURL.Substring(0, finalURL.IndexOf('/'));
 
