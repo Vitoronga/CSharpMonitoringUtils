@@ -82,9 +82,14 @@ namespace MonitoringUtils.Window
 
         public static bool IsAnURL(string url)
         {
-            Match match = Regex.Match(url, "[a-zA-Z0-9\\-]+\\.[a-zA-Z0-9\\-]+");
+            // Check whitespaces
+            Match match1 = Regex.Match(url, "[\\s]");
+            if (match1.Success) return false;
 
-            return match.Success;
+            
+            Match match2 = Regex.Match(url, "[a-zA-Z0-9\\-]+\\.[a-zA-Z0-9\\-]+");
+
+            return match2.Success;
         }
     }
 }
