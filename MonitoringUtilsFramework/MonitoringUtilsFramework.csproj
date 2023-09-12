@@ -79,11 +79,23 @@
     <Compile Include="Mouse\MouseButtonInfo.cs" />
     <Compile Include="Mouse\MouseFuncs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Window\BrowserHandler.cs" />
     <Compile Include="Window\WindowFuncs.cs" />
     <Compile Include="Window\WindowInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="UIAutomationClient">
+      <Guid>{944DE083-8FB8-45CF-BCB7-C477ACB2F897}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
