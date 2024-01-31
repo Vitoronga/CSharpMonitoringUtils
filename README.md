@@ -16,6 +16,39 @@ The goal of this library is to extract useful functionality from project Vanara 
 
 
 
+## Getting Started:
+
+### 1. Get the nuget package
+
+```
+dotnet add package MonitoringUtils --version 1.0.0
+```
+
+### 2. Add namespace reference (according to the functionality you need)
+
+```
+using MonitoringUtils.Window;
+using MonitoringUtils.Keyboard;
+using MonitoringUtils.Mouse;
+```
+
+### 3. Use the main static classes to access functionalities:
+
+```
+// Getting focused window:
+WindowInfo currentWindowInfo = WindowFuncs.GetForegroundWindow();
+Console.WriteLine(currentWindowInfo.ProcessName);
+
+// Getting mouse1 button usage
+bool isM1Active = MouseFuncs.IsButtonPressed(MouseButtonsEnum.LeftButton);
+Console.WriteLine($"Mouse 1 is currently {(isM1Active ? "Active" : "Inactive")}");
+
+// Getting keyboard overall usage
+bool hasKeyboardBeenUsed = KeyboardFuncs.HasAnyKeyChanged();
+Console.WriteLine($"Since last check, the keyboard has {(hasKeyboardBeenUsed ? "" : "NOT ")}been used");
+```
+
+
 ## General Tips
 
 As the project isn't properly documented yet, here are some guidelines to work with it:
