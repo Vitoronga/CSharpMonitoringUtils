@@ -6,6 +6,8 @@ The goal of this library is to extract useful functionality from project Vanara 
 
 ***WARNING: This project is highly experimental and early in progress. Use it at your own risk.***
 
+***Legal Disclaimer: I do not endorse nor support any software or creation that uses this library. As for the user, use it responsibly.***
+
 
 
 ## Before proceding:
@@ -18,7 +20,7 @@ The goal of this library is to extract useful functionality from project Vanara 
 
 ## Getting Started:
 
-### 1. Get the nuget package
+### 1. Get the [*nuget package*](https://www.nuget.org/packages/MonitoringUtils/)
 
 ```
 dotnet add package MonitoringUtils --version 1.0.0
@@ -37,7 +39,7 @@ using MonitoringUtils.Mouse;
 ```
 // Getting focused window:
 WindowInfo currentWindowInfo = WindowFuncs.GetForegroundWindow();
-Console.WriteLine(currentWindowInfo.ProcessName);
+Console.WriteLine($"Window process name: {currentWindowInfo.ProcessName}");
 
 // Getting mouse1 button usage
 bool isM1Active = MouseFuncs.IsButtonPressed(MouseButtonsEnum.LeftButton);
